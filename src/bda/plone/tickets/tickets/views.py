@@ -10,8 +10,8 @@ from bda.plone.orders.browser.views import TableData
 from bda.plone.orders.browser.views import vendors_form_vocab
 from bda.plone.orders.browser.views import customers_form_vocab
 from bda.plone.orders.browser.views import Translate
-from bda.plone.orders.browser.views import SalariedDropdown
-from bda.plone.orders.browser.views import StateDropdown
+from bda.plone.orders.browser.views import OrderSalariedDropdown
+from bda.plone.orders.browser.views import OrderStateDropdown
 from bda.plone.orders.common import OrderData
 from bda.plone.orders.common import get_bookings_soup
 from bda.plone.orders.common import get_order
@@ -709,6 +709,7 @@ class TicketView(CartView):
             tickets['customer'] = customer_name
 
             for booking in bookings:
+              print booking.attrs.keys()
               original_price = (Decimal(str(booking.attrs['net']))) * 1
               price_total = original_price + original_price / Decimal(100) * Decimal(str(booking.attrs['vat']))
 
@@ -726,6 +727,7 @@ class TicketView(CartView):
 
             tickets["total_tickets"] = total_items
         except:
+            raise
             return tickets
         
         return tickets

@@ -65,9 +65,9 @@
       for="*"
       name="ticket_cart_summary"
       class=".views.CartView"
-      template="template/cart_ticket_summary.pt"
+      template="templates/cart_ticket_summary.pt"
       permission="zope2.View"
-      layer="..interfaces.ICartExtensionLayer" />
+      layer="bda.plone.cart.interfaces.ICartExtensionLayer" />
 
     <!-- Behaviors -->
     <plone:behavior
