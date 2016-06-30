@@ -1,0 +1,116 @@
+<div id="cart"
+     i18n:domain="bda.plone.tickets"
+     tal:define="tickets view/get_tickets;
+                 currency view/currency;
+                 order_id python: request.get('order_id', 0);">
+
+  <tal:cart
+    tal:define="orders python: view.get_etickets(order_id);
+                total_tickets python: orders['total_tickets'];
+                global counter python: 0;">
+
+    <tal:entry tal:repeat="order python: orders['tickets']"
+               tal:define="customer python: orders['customer']">
+
+      <tal:block
+        tal:define="title python: order['cart_item_title'];
+                    price python: order['cart_item_price'];
+                    count python: order['cart_item_count'];
+                    to_redeem python: order['to_redeem'];
+                    original_price python: order['cart_item_original_price'];
+                    booking_uid python: order['booking_uid'];
+                    show python: count > 0;
+                    created_date python: order['order_created_date'].strftime('%d/%m/%Y');
+                    ">
+
+        <tal:count tal:repeat="item python:range(count)">
+
+          <div class="ticket-item">
+            <div id="ticket-header" class="ticket-header">
+                <div class="logo-container">
+                  <img class="logo" src="logo.png" width="160" height="35"/>
+                </div>
+                <div class="tickets-title">
+                  <h1>E-Ticket</h1>
+                </div>
+                <p class="title-aux" i18n:translate="">Entrance ticket</p>
+            </div>
+
+            <tal:block
+              tal:define="number repeat/item/number;
+                          booking_uid_count python: '%s-%03d' %(str(booking_uid), number);
+                          barcode_text python: to_redeem[number-1];
+                          global counter python: counter + 1;">
+
+              
+              <div class="cart_item summary_item" tal:condition="show">
+                <div id="ticketBarcode" class="ticket-barcode" tal:attributes="data-text barcode_text;" style="padding-top: 50px;margin:0 auto;">
+              </div>
+
+                <table>
+                  <tbody>
+                    <tr>
+                      <td><h3 i18n:translate="">Type of ticket</h3></td><td><span tal:content="title"></span></td>
+                      <td rowspan="5" class="ticket-info" tal:define="qr_code python: view.get_qr_code(booking_uid_count)" style="vertical-align: top; padding-top: 14px;">
+
+                        <div class="info-div">
+                          <p i18n:translate="">This ticket is valid until one year after the date of purchase</p>
+                          <p i18n:translate="">This ticket is not redeemable for cash and will be scanned at the entrance of the museum</p>
+                          <p i18n:translate="">The general conditions for visitors apply to this e-ticket. See: www.teylersmuseum.nl</p>
+                        </div>
+                      </td>
+
+                    </tr>
+
+                    <tr>
+                      <td><h3 i18n:translate="">Customer name</h3></td><td><span tal:content="customer">Customer</span></td>
+                    </tr>
+                    <tr>
+                      <td><h3 i18n:translate="">Price</h3></td><td><span tal:content="currency">EUR</span><span tal:content="price"></span></td>
+                    </tr>
+                    <tr>
+                      <td><h3 i18n:translate="">Ticket number</h3></td><td><span tal:content="python: '%s/%s' %(counter, total_tickets)">1/2</span></td>
+                    </tr>
+                    <tr>
+                      <td><h3 i18n:translate="">Date of purchase</h3></td><td><span tal:content="created_date">07/03/2016</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div id="ticket-footer" class="ticket-footer">
+                  <div>
+                    <h4 i18n:translate="">Address</h4>
+                    <p i18n:translate="">Teylers Museum, Spaarne 16, 2011 CH HAARLEM. 023-516 0960</p>
+                  </div>
+                  <div>
+                    <h4 i18n:translate="">Opening hours</h4>
+                    <p>
+                      <span 18n:translate="">Tuesdays to Fridays: 10 a.m - 5 p.m. Saturdays, Sundays, public holidays: 11 a.m. – 5 p.m. Please note that during public holidays, opening hours may differ from the regular opening times. Please check the opening hours before your visit on:</span>
+                      <br/><span 18n:translate="">http://www.teylersmuseum.nl/en/visiting-the-museum/practical-information/opening-hours-and-admission-fees</span>
+                  </p>
+                  </div>
+                  <div class="accessibility">
+                    <h4 i18n:translate="">How to find us</h4>
+                    <p i18n:translate="">Teylers Museum is easy to reach by car and train. If you come by train: the museum is on a 10 minutes walk from Haarlem Central Station. Take the following route; Jansweg, Jansstraat, turn left into Korte Jansstraat, turn right into Bakenessergracht, straight on to the end, turn right at the S paarne River, Teylers Museum will be on your right. If you come by car: multi-storey carpark De Appelaar is located next to the museum.</p>
+                    
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </tal:block>
+
+            <script>
+                jQuery(".ticket-barcode").each(function(index){
+                  var text = jQuery(this).data("text");
+                  jQuery(this).barcode(""+text, "code39", {barWidth: 1, barHeight:40, fontSize: 11});
+                });
+            </script>
+          
+          </div>
+          
+      </tal:count>
+
+      </tal:block>
+    </tal:entry>
+  </tal:cart>
+</div>

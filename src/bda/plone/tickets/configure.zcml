@@ -1,0 +1,18 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:five="http://namespaces.zope.org/five"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+           xmlns:browser="http://namespaces.zope.org/browser">
+
+  <i18n:registerTranslations directory="locales" />
+ 	
+ 	<genericsetup:registerProfile
+	    name="default"
+	    title="bda.plone.tickets"
+	    directory="profiles/default"
+	    description="Adds an implementation to generate tickets for BDA Plone Shop"
+	    provides="Products.GenericSetup.interfaces.EXTENSION" />
+
+  <include package=".tickets" />
+
+</configure>
